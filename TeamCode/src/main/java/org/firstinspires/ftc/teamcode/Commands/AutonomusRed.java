@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.Commands;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
-
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -21,16 +18,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 
-@Autonomous(name="Auto", group="Linear Opmode")
-public class Autonomus extends LinearOpMode {
+@Autonomous(name="Red Auto", group="Linear Opmode")
+public class AutonomusRed extends LinearOpMode {
 
-    private IMU   imu ;
+    private BNO055IMU   imu ;
     private double          robotHeading  = 0;
     private double          headingOffset = 0;
     private double          headingError  = 0;
     private DcMotor rightDrive ;private DcMotor leftDrive ;
 
- //   private ServoEx servo;
+    //   private ServoEx servo;
 
 
     private double  targetHeading = 0;
@@ -53,21 +50,22 @@ public class Autonomus extends LinearOpMode {
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;
 
-    private ServoEx serg1;
+    private ServoEx servo3;
 
 
     @Override
     public void runOpMode() {
 
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
 
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
-       // servo = new SimpleServo(hardwareMap,"servo",0,180, AngleUnit.DEGREES);
+        servo3 = new SimpleServo(hardwareMap,"servo3",0,180, AngleUnit.DEGREES);
+        servo3.setInverted(false);
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -87,22 +85,15 @@ public class Autonomus extends LinearOpMode {
         resetHeading();
 
         waitForStart();
+
+        driveStraight(DRIVE_SPEED,10,0);
+        sleep(1000);
+        turnToHeading(TURN_SPEED,-90);
         sleep(500);
-        driveStraight(DRIVE_SPEED, 100, 0);
-        sleep(1000);
-        turnToHeading(turnSpeed,180);
-        sleep(1000);
-        driveStraight(DRIVE_SPEED, 10, 180);
+        driveStraight(DRIVE_SPEED,20,-90);
+        sleep(200);
+        turnToHeading(TURN_SPEED,0);
 
-
-        /*
-
-        turnToHeading(TURN_SPEED,180);
-        turnToHeading(TURN_SPEED, 90);
-        driveStraightWithIntake(DRIVE_SPEED, 80,0);
-
-
-            */
     }
 
     public void resetHeading() {
@@ -110,18 +101,18 @@ public class Autonomus extends LinearOpMode {
         robotHeading = 0;
     }
     public double getRawHeading() {
-        Orientation angles   = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angles.firstAngle;
 
     }
 
+    public void grabFundation(){
+        servo3.setPosition(1);
+    }
 
-  /*  public void degree0(){
-        servo.setPosition(0);
-    }*/
-   /* public void degree90(){
-        servo.setPosition(1);
-    }*/
+    public void leaveFoundation(){
+        servo3.setPosition(0.5);
+    }
 
     public void driveStraight(double maxDriveSpeed,
                               double distance,
