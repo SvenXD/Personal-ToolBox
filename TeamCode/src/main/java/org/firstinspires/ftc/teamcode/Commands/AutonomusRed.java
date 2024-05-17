@@ -93,6 +93,12 @@ public class AutonomusRed extends LinearOpMode {
         driveStraight(DRIVE_SPEED,20,-90);
         sleep(200);
         turnToHeading(TURN_SPEED,0);
+        sleep(100);
+        driveStraight(DRIVE_SPEED,50,0);
+        sleep(300);
+        grabFundation();
+        sleep(1000);
+        driveStraight(DRIVE_SPEED,-10,0);
 
     }
 
