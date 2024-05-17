@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands;
+package org.firstinspires.ftc.teamcode.Commands.Autos;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 
-@Autonomous(name="Red Auto", group="Linear Opmode")
-public class AutonomusRed extends LinearOpMode {
+@Autonomous(name="Blue Auto", group="Linear Opmode")
+public class AutonomusBlue extends LinearOpMode {
 
     private BNO055IMU   imu ;
     private double          robotHeading  = 0;
@@ -27,7 +27,7 @@ public class AutonomusRed extends LinearOpMode {
     private double          headingError  = 0;
     private DcMotor rightDrive ;private DcMotor leftDrive ;
 
-    //   private ServoEx servo;
+ //   private ServoEx servo;
 
 
     private double  targetHeading = 0;
@@ -86,19 +86,7 @@ public class AutonomusRed extends LinearOpMode {
 
         waitForStart();
 
-        driveStraight(DRIVE_SPEED,10,0);
-        sleep(1000);
-        turnToHeading(TURN_SPEED,-90);
-        sleep(500);
-        driveStraight(DRIVE_SPEED,20,-90);
-        sleep(200);
-        turnToHeading(TURN_SPEED,0);
-        sleep(100);
-        driveStraight(DRIVE_SPEED,50,0);
-        sleep(300);
-        grabFundation();
-        sleep(1000);
-        driveStraight(DRIVE_SPEED,-10,0);
+        driveStraight(DRIVE_SPEED,30,0);
 
     }
 
