@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Commands.TankDriveCommand;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.ServoSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
@@ -21,7 +20,6 @@ public class RobotContainer extends CommandOpMode {
         SampleTankDrive sampleTankDrive = new SampleTankDrive(hardwareMap);
         TankDriveSubsystem m_drive = new TankDriveSubsystem(sampleTankDrive);
         ArmSubsystem m_arm = new ArmSubsystem(telemetry, hardwareMap);
-        ServoSubsystem m_servo = new ServoSubsystem(telemetry,hardwareMap);
 
         GamepadEx chassisDriver = new GamepadEx(gamepad1);
         GamepadEx subsystemsDriver = new GamepadEx(gamepad2);
@@ -32,26 +30,32 @@ public class RobotContainer extends CommandOpMode {
          ,chassisDriver::getRightX));
 
         //Arm------------------------------------
+            //Arm with poses
+              chassisDriver.getGamepadButton(GamepadKeys.Button.A)
+                        .whenPressed(() -> m_arm.upArm(4000,1));
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_UP)
+              chassisDriver.getGamepadButton(GamepadKeys.Button.B)
+                          .whenPressed(() -> m_arm.lowerArm(0,1));
+
+        //Manual arm with encoder
+
+               chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                     .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+1000,1));
+
+               chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                       .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-1000,1));
+
+        /*      In case needed power and / or positions not working, nor backup code dead
+        chassisDriver.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(() -> m_arm.setPower(1))
                 .whenReleased(() -> m_arm.setPower(0));
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_DOWN)
+        chassisDriver.getGamepadButton(GamepadKeys.Button.X)
                 .whileHeld(() -> m_arm.setPower(-1))
                 .whenReleased(() -> m_arm.setPower(0));
+        */
 
-        //Servo -------------------------------------------------------------
-
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.X)
-                .whenPressed(m_servo::open);
-
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.Y)
-                .whenPressed(m_servo::close);
-
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.B)
-                .toggleWhenPressed(() -> m_servo.grabFundation(),() -> m_servo.leaveFoundation());
-
+        //-------------------------------------------------------------
 
 
         schedule(new RunCommand(() -> {

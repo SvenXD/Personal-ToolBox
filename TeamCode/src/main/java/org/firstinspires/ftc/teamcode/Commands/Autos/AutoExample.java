@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.Commands.Autos;
 
-import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -15,11 +12,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 
-@Autonomous(name="Blue Auto", group="Linear Opmode")
-public class AutonomusBlue extends LinearOpMode {
+@Autonomous(name="Auto Example", group="Linear Opmode")
+public class AutoExample extends LinearOpMode {
 
     private BNO055IMU   imu ;
     private double          robotHeading  = 0;
@@ -50,8 +46,8 @@ public class AutonomusBlue extends LinearOpMode {
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;
 
-    private ServoEx servo3;
 
+    private DcMotorEx armMotor;
 
     @Override
     public void runOpMode() {
@@ -64,21 +60,22 @@ public class AutonomusBlue extends LinearOpMode {
 
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        servo3 = new SimpleServo(hardwareMap,"servo3",0,180, AngleUnit.DEGREES);
-        servo3.setInverted(false);
+        armMotor = hardwareMap.get(DcMotorEx.class,"brazo");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
 
 
@@ -90,6 +87,12 @@ public class AutonomusBlue extends LinearOpMode {
 
     }
 
+    public void setPosition(int pos, double power){
+        armMotor.setTargetPosition(pos);
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setPower(power);
+    }
+
     public void resetHeading() {
         headingOffset = getRawHeading();
         robotHeading = 0;
@@ -98,14 +101,6 @@ public class AutonomusBlue extends LinearOpMode {
         Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angles.firstAngle;
 
-    }
-
-    public void grabFundation(){
-        servo3.setPosition(1);
-    }
-
-    public void leaveFoundation(){
-        servo3.setPosition(0.5);
     }
 
     public void driveStraight(double maxDriveSpeed,
