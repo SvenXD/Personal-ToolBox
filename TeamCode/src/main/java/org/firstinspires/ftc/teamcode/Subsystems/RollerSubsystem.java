@@ -1,4 +1,4 @@
-/*package org.firstinspires.ftc.teamcode.Unused;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class RollerSubsystem1 extends SubsystemBase {
+public class RollerSubsystem extends SubsystemBase {
 
     DcMotorEx rollerMotor;
 
@@ -15,7 +15,7 @@ public class RollerSubsystem1 extends SubsystemBase {
 
     HardwareMap hardwareMap;
 
-    public RollerSubsystem1(HardwareMap hardwareMap, Telemetry telemetry){
+    public RollerSubsystem(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
         rollerMotor = hardwareMap.get(DcMotorEx.class, "roller");
@@ -35,4 +35,3 @@ public class RollerSubsystem1 extends SubsystemBase {
         rollerMotor.setPower(0);
     }
 }
-*/

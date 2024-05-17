@@ -18,8 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 
-@Autonomous(name="Red Auto", group="Linear Opmode")
-public class AutonomusRed extends LinearOpMode {
+@Autonomous(name="Example Auto", group="Linear Opmode")
+public class ExampleAuto extends LinearOpMode {
 
     private BNO055IMU   imu ;
     private double          robotHeading  = 0;
@@ -50,8 +50,6 @@ public class AutonomusRed extends LinearOpMode {
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;
 
-    private ServoEx servo3;
-
 
     @Override
     public void runOpMode() {
@@ -64,8 +62,7 @@ public class AutonomusRed extends LinearOpMode {
 
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        servo3 = new SimpleServo(hardwareMap,"servo3",0,180, AngleUnit.DEGREES);
-        servo3.setInverted(false);
+
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -86,13 +83,7 @@ public class AutonomusRed extends LinearOpMode {
 
         waitForStart();
 
-        driveStraight(DRIVE_SPEED,10,0);
-        sleep(1000);
-        turnToHeading(TURN_SPEED,-90);
-        sleep(500);
-        driveStraight(DRIVE_SPEED,20,-90);
-        sleep(200);
-        turnToHeading(TURN_SPEED,0);
+        driveStraight(DRIVE_SPEED,30,0);
 
     }
 
@@ -106,13 +97,6 @@ public class AutonomusRed extends LinearOpMode {
 
     }
 
-    public void grabFundation(){
-        servo3.setPosition(1);
-    }
-
-    public void leaveFoundation(){
-        servo3.setPosition(0.5);
-    }
 
     public void driveStraight(double maxDriveSpeed,
                               double distance,

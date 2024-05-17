@@ -7,11 +7,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.checkerframework.checker.units.qual.A;
+import org.firstinspires.ftc.teamcode.Commands.RollerCommand;
 import org.firstinspires.ftc.teamcode.Commands.TankDriveCommand;
 
-import org.firstinspires.ftc.teamcode.Subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.ServoSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.RollerSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
@@ -21,48 +20,31 @@ public class RobotContainer extends CommandOpMode {
     public void initialize() {
         SampleTankDrive sampleTankDrive = new SampleTankDrive(hardwareMap);
         TankDriveSubsystem m_drive = new TankDriveSubsystem(sampleTankDrive);
-        ArmSubsystem m_arm = new ArmSubsystem(telemetry, hardwareMap);
-      //  ServoSubsystem m_servo = new ServoSubsystem(telemetry,hardwareMap);
+        RollerSubsystem m_roller = new RollerSubsystem(hardwareMap,telemetry);
 
         GamepadEx chassisDriver = new GamepadEx(gamepad1);
         GamepadEx subsystemsDriver = new GamepadEx(gamepad2);
 
-        //Tank----------------------------------
+        //Tank-----------------------------------------------------------------------
 
         m_drive.setDefaultCommand(new TankDriveCommand(m_drive, chassisDriver::getLeftY
          ,chassisDriver::getRightX));
 
-        //Arm------------------------------------
+        //Roller---------------------------------------------------------------------
+          m_roller.setDefaultCommand(new RollerCommand(m_roller,chassisDriver));  //Roller with bumpers
+          //Intake Roller
+          chassisDriver.getGamepadButton(GamepadKeys.Button.Y)
+                .toggleWhenPressed(m_roller::intakeRoller, m_roller::stopRoller);
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_UP)
-                .whileHeld(() -> m_arm.setPower(1))
-                .whenReleased(() -> m_arm.setPower(0));
-
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_DOWN)
-                .whileHeld(() -> m_arm.setPower(-1))
-                .whenReleased(() -> m_arm.setPower(0));
-
-        //Servo -------------------------------------------------------------
-/*
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.X)
-                .whenPressed(m_servo::open);
-
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.Y)
-                .whenPressed(m_servo::close);
-
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.B)
-                .toggleWhenPressed(() -> m_servo.grabFundation(),() -> m_servo.leaveFoundation());
-*/
-
-
+        //Outake
+        chassisDriver.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(m_roller::outakeRoller)
+                .whenReleased(m_roller::stopRoller);
+        //End----------------------------------------------------------------------------
         schedule(new RunCommand(() -> {
             m_drive.update();
             telemetry.addData("Heading", m_drive.getPoseEstimate().getHeading());
             telemetry.update();
         }));
-//Test
     }
-
-
-
 }
