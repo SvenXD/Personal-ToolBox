@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands.Autos;
+/*package org.firstinspires.ftc.teamcode.Commands.Autos;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -25,7 +25,7 @@ public class AutonomusRed extends LinearOpMode {
     private double          robotHeading  = 0;
     private double          headingOffset = 0;
     private double          headingError  = 0;
-    private DcMotor rightDrive ;private DcMotor leftDrive ;
+    private DcMotor rightDrive ;private DcMotor leftDrive; private DcMotor armMotor;
 
     //   private ServoEx servo;
 
@@ -50,8 +50,7 @@ public class AutonomusRed extends LinearOpMode {
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;
 
-    private ServoEx servo3;
-
+    ServoEx servoDerecho,servoIzquierdo;
 
     @Override
     public void runOpMode() {
@@ -64,21 +63,27 @@ public class AutonomusRed extends LinearOpMode {
 
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        servo3 = new SimpleServo(hardwareMap,"servo3",0,180, AngleUnit.DEGREES);
-        servo3.setInverted(false);
+        armMotor = hardwareMap.get(DcMotor.class,"brazo");
+        servoDerecho = new SimpleServo(hardwareMap, "servoDer",0,180);
+        servoIzquierdo = new SimpleServo(hardwareMap, "servoIzq",0,180);
+
+        servoDerecho.setInverted(true);
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
 
@@ -86,6 +91,8 @@ public class AutonomusRed extends LinearOpMode {
 
         waitForStart();
 
+        setArmPosition(600,0.5);
+        sleep(700);
         driveStraight(DRIVE_SPEED,10,0);
         sleep(1000);
         turnToHeading(TURN_SPEED,-90);
@@ -94,11 +101,11 @@ public class AutonomusRed extends LinearOpMode {
         sleep(200);
         turnToHeading(TURN_SPEED,0);
         sleep(100);
-        driveStraight(DRIVE_SPEED,50,0);
+        driveStraight(DRIVE_SPEED,50,0);  //CHECK DISTANCE FROM BACK TO THE MEDIUM
         sleep(300);
-        grabFundation();
-        sleep(1000);
-        driveStraight(DRIVE_SPEED,-10,0);
+        turnToHeading(TURN_SPEED,90);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-80,0);
 
     }
 
@@ -112,13 +119,21 @@ public class AutonomusRed extends LinearOpMode {
 
     }
 
-    public void grabFundation(){
-        servo3.setPosition(1);
+    public void close(){
+        servoDerecho.setPosition(0.2);
+        servoIzquierdo.setPosition(0.2);
+    }
+    public void open(){
+        servoDerecho.setPosition(0.6);
+        servoIzquierdo.setPosition(0.6);
     }
 
-    public void leaveFoundation(){
-        servo3.setPosition(0.5);
+    public void setArmPosition(int pos, double power) {
+        armMotor.setTargetPosition(pos);
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setPower(power);
     }
+
 
     public void driveStraight(double maxDriveSpeed,
                               double distance,
@@ -272,3 +287,4 @@ public class AutonomusRed extends LinearOpMode {
     }
 
 }
+*/

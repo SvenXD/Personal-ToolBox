@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands.Autos;
+/*package org.firstinspires.ftc.teamcode.Commands.Autos;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -7,6 +7,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -43,7 +44,7 @@ public class AutonomusBlue extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = 37.28;
 
-    static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
+    static final double     DRIVE_SPEED             = 0.3;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.15;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;
 
@@ -67,8 +68,8 @@ public class AutonomusBlue extends LinearOpMode {
         servo3 = new SimpleServo(hardwareMap,"servo3",0,180, AngleUnit.DEGREES);
         servo3.setInverted(false);
 
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD   );
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -86,7 +87,19 @@ public class AutonomusBlue extends LinearOpMode {
 
         waitForStart();
 
-        driveStraight(DRIVE_SPEED,30,0);
+        driveStraight(DRIVE_SPEED,10,0);
+        sleep(1000);
+        turnToHeading(TURN_SPEED,-90);
+        sleep(500);
+        driveStraight(DRIVE_SPEED,20,-90);
+        sleep(200);
+        turnToHeading(TURN_SPEED,0);
+        sleep(100);
+        driveStraight(DRIVE_SPEED,50,0);
+        sleep(300);
+        grabFundation();
+        sleep(1000);
+        driveStraight(DRIVE_SPEED,-10,0);
 
     }
 
@@ -260,3 +273,4 @@ public class AutonomusBlue extends LinearOpMode {
     }
 
 }
+*/

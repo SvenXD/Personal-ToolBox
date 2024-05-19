@@ -23,10 +23,13 @@ public class ArmSubsystem extends SubsystemBase {
         this.hardwareMap = hardwareMap;
 
         armMotor = hardwareMap.get(DcMotorEx.class,"brazo");
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-   /* public void upArm(int pos, double power){
+    public void upArm(int pos, double power){
         armMotor.setTargetPosition(pos);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armMotor.setPower(power);
@@ -36,17 +39,17 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor.setTargetPosition(pos);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         armMotor.setPower(power);
-    }*/
+    }
 
     public void setPower(double power){
         armMotor.setPower(power);
     }
-
-    @Override
-    public void periodic(){
-        telemetry.addData( "brazo", armMotor.getCurrentPosition());
+    public int  getArmPose(){
+        return armMotor.getCurrentPosition();
     }
-
-
+@Override
+    public void periodic(){
+        telemetry.addData("brazo",armMotor.getCurrentPosition());
+    }
 
 }

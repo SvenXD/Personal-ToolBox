@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+//import org.firstinspires.ftc.teamcode.Commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.Commands.TankDriveCommand;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ArmSubsystem;
@@ -33,33 +34,39 @@ public class RobotContainer extends CommandOpMode {
 
         //Arm------------------------------------
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_UP)
-                .whileHeld(() -> m_arm.setPower(1))
-                .whenReleased(() -> m_arm.setPower(0));
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(() -> m_arm.setPosition(2000,0.5));
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_DOWN)
-                .whileHeld(() -> m_arm.setPower(-1))
-                .whenReleased(() -> m_arm.setPower(0));
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(() -> m_arm.setPosition(0,0.5));
+
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,1))
+                        .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
+
+
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,1))
+                                .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
+
 
         //Servo -------------------------------------------------------------
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.X)
+        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_LEFT)
                 .whenPressed(m_servo::open);
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.Y)
+        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(m_servo::close);
 
         new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.B)
-                .toggleWhenPressed(() -> m_servo.grabFundation(),() -> m_servo.leaveFoundation());
-
-
-
+                .toggleWhenPressed(m_servo::openPose, m_servo::closePose);
+        //-------------------------------------------------------------------------------
         schedule(new RunCommand(() -> {
             m_drive.update();
             telemetry.addData("Heading", m_drive.getPoseEstimate().getHeading());
             telemetry.update();
         }));
-//Test
+
     }
 
 
