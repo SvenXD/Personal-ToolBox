@@ -29,11 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
             armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void upArm(int pos, double power){
-        armMotor.setTargetPosition(pos);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(power);
-    }
+
 
     public void setPosition(int pos, double power){
         armMotor.setTargetPosition(pos);
@@ -41,9 +37,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor.setPower(power);
     }
 
-    public void setPower(double power){
-        armMotor.setPower(power);
-    }
+
     public int  getArmPose(){
         return armMotor.getCurrentPosition();
     }

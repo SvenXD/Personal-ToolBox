@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RobotContainer;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -34,20 +35,23 @@ public class RobotContainer extends CommandOpMode {
 
         //Arm------------------------------------
 
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(() -> m_arm.setPosition(2000,0.5));
+        chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(() -> m_arm.setPosition(3350,0.7));
 
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> m_arm.setPosition(0,0.5));
+        chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(() -> m_arm.setPosition(0,0.7));
 
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,1))
+        chassisDriver.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,0.5))
                         .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
 
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,1))
+        chassisDriver.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.5))
                                 .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
+
+        chassisDriver.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(new InstantCommand(m_drive::bajarVel));
 
 
         //Servo -------------------------------------------------------------

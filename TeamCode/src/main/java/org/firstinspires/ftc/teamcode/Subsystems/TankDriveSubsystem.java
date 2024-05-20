@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -7,6 +8,9 @@ import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -21,6 +25,8 @@ public class TankDriveSubsystem extends SubsystemBase {
 
     private final SampleTankDrive drive;
 
+    private boolean vel = true;
+
     public TankDriveSubsystem(SampleTankDrive drive) {
         this.drive = drive;
     }
@@ -34,6 +40,10 @@ public class TankDriveSubsystem extends SubsystemBase {
         return drive;
     }
 
+    public void bajarVel(){
+        this.vel = !vel;
+    }
+
     public void update() { drive.update(); }
 
     public void updatePoseEstimate(){
@@ -44,9 +54,9 @@ public class TankDriveSubsystem extends SubsystemBase {
 
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        -leftY,
+                        vel ? -leftY : -leftY*.5,
                         0,
-                        -rightX
+                        vel ? -rightX : -rightX*.35
                 )
         );
 
@@ -101,4 +111,6 @@ public class TankDriveSubsystem extends SubsystemBase {
 
 
 
-}
+
+    }
+
