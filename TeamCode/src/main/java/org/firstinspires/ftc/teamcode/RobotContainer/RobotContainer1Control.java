@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @TeleOp
-public class RobotContainer extends CommandOpMode {
+public class RobotContainer1Control extends CommandOpMode {
     @Override
     public void initialize() {
         SampleTankDrive sampleTankDrive = new SampleTankDrive(hardwareMap);
@@ -39,7 +39,7 @@ public class RobotContainer extends CommandOpMode {
                 .whenPressed(() -> m_arm.setPosition(3350,0.7));
 
         chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> m_arm.setPosition(0,0.7));
+                .whenPressed(() -> m_arm.setPosition(50,0.7));
 
         chassisDriver.getGamepadButton(GamepadKeys.Button.Y)
                 .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,0.5))
@@ -47,8 +47,11 @@ public class RobotContainer extends CommandOpMode {
 
 
         chassisDriver.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.5))
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.8))
                                 .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
+
+        chassisDriver.getGamepadButton(GamepadKeys.Button.X)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+100,0.5));
 
         chassisDriver.getGamepadButton(GamepadKeys.Button.B)
                 .whenPressed(new InstantCommand(m_drive::bajarVel));

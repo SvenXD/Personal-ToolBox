@@ -91,25 +91,41 @@ public class AutoBlue extends LinearOpMode {
 
         waitForStart();
 
-        sleep(1000);
-        open();
-        sleep(3000);
-        brazoUp(1500);
-        sleep(3000);
+        brazoUp(-1500);
+        sleep(1300);
+        close();
         driveStraight(DRIVE_SPEED,-10,0);
-        sleep(500);
+        sleep(300);
         turnToHeading(TURN_SPEED,-90);
-        sleep(500);
-        driveStraight(DRIVE_SPEED,30,-90);
-        sleep(500);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,22,-90);
+        sleep(300);
         turnToHeading(TURN_SPEED,0);
-        sleep(500);
-        driveStraight(DRIVE_SPEED,-85,0);
-        sleep(500);
-        repositionbrazo(0);
-        sleep(3000);
-        driveStraight(DRIVE_SPEED,50,0);
-
+        sleep(300);
+        driveStraight(.5,-48,0);
+        sleep(300);
+        turnToHeading(0.1,-90);
+        sleep(300);
+        open();
+        sleep(400);
+        repositionbrazo(-408);
+        sleep(1000);
+        driveStraight(.4,-6.8   ,-90);
+        sleep(300);
+        close();
+        sleep(1000);
+        repositionbrazo(-1500);
+        sleep(1500);
+        driveStraight(DRIVE_SPEED,17,-90);
+        sleep(300);
+        turnToHeading(TURN_SPEED,-180);
+        sleep(400);
+        driveStraight(DRIVE_SPEED,37,-180);
+        sleep(300);
+        brazoUp(-3350);
+        sleep(2500);
+        open();
+        sleep(4000);
 
     }
 

@@ -17,8 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Auto Red", group="Linear Opmode")
-public class AutoTest extends LinearOpMode {
+@Autonomous(name="Auto Red NO LE DEN AL DE TIEMPOS", group="Linear Opmode")
+public class AutoRed extends LinearOpMode {
 
     private BNO055IMU       imu         = null;
     private double          robotHeading  = 0;
@@ -65,6 +65,7 @@ public class AutoTest extends LinearOpMode {
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
 
         motor3 = hardwareMap.get(DcMotor.class, "brazo");
+        motor3.setDirection(DcMotorSimple.Direction.REVERSE);
 
         servoIzquierdo = new SimpleServo(hardwareMap, "servoIzq", 0, 180, AngleUnit.DEGREES);
         servoDerecho = new SimpleServo(hardwareMap, "servoDer", 0, 180, AngleUnit.DEGREES);
@@ -91,25 +92,49 @@ public class AutoTest extends LinearOpMode {
 
         waitForStart();
 
-        sleep(1000);
-        open();
-        sleep(3000);
-        brazoUp(1500);
-        sleep(3000);
+        sleep(200);
+        brazoUp(-1500);
+        sleep(2300);
+        close();
         driveStraight(DRIVE_SPEED,-10,0);
-        sleep(500);
+        sleep(300);
         turnToHeading(TURN_SPEED,90);
-        sleep(500);
-        driveStraight(DRIVE_SPEED,30,90);
-        sleep(500);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,22,90);
+        sleep(300);
         turnToHeading(TURN_SPEED,0);
-        sleep(500);
-        driveStraight(DRIVE_SPEED,-87,0);
-        sleep(500);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-45,0);
+        sleep(300);
+        turnToHeading(TURN_SPEED,90);
+        sleep(300);
+        open();
+        sleep(400);
+        repositionbrazo(-410);
+        sleep(1000);
+        driveStraight(DRIVE_SPEED,-7.5,90);
+        sleep(300);
+        close();
+        sleep(1000);
+        repositionbrazo(-1500);
+        sleep(1500);
+        driveStraight(DRIVE_SPEED,18,90);
+        sleep(300);
+        turnToHeading(TURN_SPEED,-180);
+        sleep(400);
+        driveStraight(DRIVE_SPEED,44,-180);
+        sleep(300);
+        brazoUp(-3150);
+        sleep(3500);
+        open();
+        sleep(4000);
+
+
+       /* sleep(500);
         repositionbrazo(0);
         sleep(3000);
         driveStraight(DRIVE_SPEED,70,0);
-
+*/
 
     }
 
