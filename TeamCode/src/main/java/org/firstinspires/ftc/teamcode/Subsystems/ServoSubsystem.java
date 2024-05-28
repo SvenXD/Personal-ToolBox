@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ServoSubsystem extends SubsystemBase {
 
-        ServoEx servoDerecho,servoIzquierdo,servo3;
+        ServoEx servoDerecho,servoIzquierdo;
     HardwareMap hardwareMap;
     Telemetry telemetry;
 
@@ -18,28 +18,19 @@ public class ServoSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
         servoDerecho = new SimpleServo(hardwareMap, "servoDer",0,180);
         servoIzquierdo = new SimpleServo(hardwareMap, "servoIzq",0,180);
-        servo3 = new SimpleServo(hardwareMap,"servo3",0,180);
-
-        servo3.setInverted(false);
         servoDerecho.setInverted(true);
     }
     public void close(){
-     servoDerecho.setPosition(0.7);
-     servoIzquierdo.setPosition(0.6);
+     servoDerecho.setPosition(0.45);
+     servoIzquierdo.setPosition(0.35);
     }
     public void open(){
-        servoDerecho.setPosition(1);
-        servoIzquierdo.setPosition(0.9);
+        servoDerecho.setPosition(0.75);
+        servoIzquierdo.setPosition(0.65);
     }
     public void customPose(double pose1,double pose2){
         servoDerecho.setPosition(pose1);
         servoIzquierdo.setPosition(pose2);
     }
 
-    public void openPose() {          //Recommended values, 0.6
-        servo3.setPosition(1);
-    }
-    public void closePose(){        //Recommended values 0.2
-        servo3.setPosition(0);
-    }
 }

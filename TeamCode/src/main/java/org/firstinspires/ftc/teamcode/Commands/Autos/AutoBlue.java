@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
 @Autonomous(name="Auto Blue", group="Linear Opmode")
+@Disabled
 public class AutoBlue extends LinearOpMode {
 
     private BNO055IMU       imu         = null;
@@ -91,42 +93,42 @@ public class AutoBlue extends LinearOpMode {
 
         waitForStart();
 
-        brazoUp(-1500);
-        sleep(1300);
         close();
-        driveStraight(DRIVE_SPEED,-10,0);
+        sleep(600);
+        brazoUp(800);
+        sleep(1000);
+        driveStraight(DRIVE_SPEED,-15,0);
         sleep(300);
         turnToHeading(TURN_SPEED,-90);
         sleep(300);
-        driveStraight(DRIVE_SPEED,22,-90);
+        driveStraight(DRIVE_SPEED,-40,-90);
         sleep(300);
-        turnToHeading(TURN_SPEED,0);
-        sleep(300);
-        driveStraight(.5,-48,0);
-        sleep(300);
-        turnToHeading(0.1,-90);
-        sleep(300);
-        open();
+        turnToHeading(TURN_SPEED,-270);
         sleep(400);
-        repositionbrazo(-408);
-        sleep(1000);
-        driveStraight(.4,-6.8   ,-90);
-        sleep(300);
-        close();
-        sleep(1000);
-        repositionbrazo(-1500);
-        sleep(1500);
-        driveStraight(DRIVE_SPEED,17,-90);
+        driveStraight(DRIVE_SPEED,80,-270);
         sleep(300);
         turnToHeading(TURN_SPEED,-180);
-        sleep(400);
-        driveStraight(DRIVE_SPEED,37,-180);
         sleep(300);
-        brazoUp(-3350);
-        sleep(2500);
+        driveStraight(DRIVE_SPEED,-10,-180);
+        sleep(300);
+        turnToHeading(TURN_SPEED,-270);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-10,-270);
+        sleep(300);
+        turnToHeading(TURN_SPEED,0);
+        brazoUp(1500);
+        sleep(300);
+        driveStraight(0.5,-20,0);
+        sleep(500);
         open();
-        sleep(4000);
-
+        sleep(400);
+        repositionbrazo(50);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-20,0);
+        sleep(300);
+        turnToHeading(TURN_SPEED,270);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-40,270);
     }
 
     public void resetHeading() {

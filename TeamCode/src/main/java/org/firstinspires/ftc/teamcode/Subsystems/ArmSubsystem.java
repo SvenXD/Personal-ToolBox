@@ -27,6 +27,7 @@ public class ArmSubsystem extends SubsystemBase {
             armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 

@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,7 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-@Autonomous(name="Auto Red NO LE DEN AL DE TIEMPOS", group="Linear Opmode")
+@Autonomous(name="Auto Red", group="Linear Opmode")
+@Disabled
 public class AutoRed extends LinearOpMode {
 
     private BNO055IMU       imu         = null;
@@ -41,7 +43,7 @@ public class AutoRed extends LinearOpMode {
 
     static final double     DRIVE_SPEED             = 0.7
             ;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.15;     // Max Turn speed to limit turn rate
+    static final double     TURN_SPEED              = 0.55;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;
 
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
@@ -92,50 +94,50 @@ public class AutoRed extends LinearOpMode {
 
         waitForStart();
 
-        sleep(200);
-        brazoUp(-1500);
-        sleep(2300);
+        open();
+        sleep(600);
+        brazoUp(-800);
+        sleep(1000);
+        repositionbrazo(-325);
+        sleep(1000);
         close();
-        driveStraight(DRIVE_SPEED,-10,0);
+        sleep(900);
+        brazoUp(-800);
+        sleep(900);
+        driveStraight(DRIVE_SPEED,-15,0);
         sleep(300);
         turnToHeading(TURN_SPEED,90);
         sleep(300);
-        driveStraight(DRIVE_SPEED,22,90);
+        driveStraight(DRIVE_SPEED,-80,90);
+      /*  sleep(300);
+        turnToHeading(TURN_SPEED,270);
+        sleep(400);
+        driveStraight(DRIVE_SPEED,30,270);
         sleep(300);
         turnToHeading(TURN_SPEED,0);
         sleep(300);
-        driveStraight(DRIVE_SPEED,-45,0);
+        driveStraight(DRIVE_SPEED,30,0);
         sleep(300);
         turnToHeading(TURN_SPEED,90);
         sleep(300);
+        driveStraight(DRIVE_SPEED,-10,-270);
+        sleep(300);
+        brazoUp(1400);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-40,-270);
+        sleep(500);
+        turnToHeading(TURN_SPEED,0);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-20,0);
         open();
-        sleep(400);
-        repositionbrazo(-410);
-        sleep(1000);
-        driveStraight(DRIVE_SPEED,-7.5,90);
+        sleep(900);
+        driveStraight(DRIVE_SPEED,-20,0);
+        sleep(200);
+        repositionbrazo(-50);
         sleep(300);
-        close();
-        sleep(1000);
-        repositionbrazo(-1500);
-        sleep(1500);
-        driveStraight(DRIVE_SPEED,18,90);
+        turnToHeading(TURN_SPEED,-270);
         sleep(300);
-        turnToHeading(TURN_SPEED,-180);
-        sleep(400);
-        driveStraight(DRIVE_SPEED,44,-180);
-        sleep(300);
-        brazoUp(-3150);
-        sleep(3500);
-        open();
-        sleep(4000);
-
-
-       /* sleep(500);
-        repositionbrazo(0);
-        sleep(3000);
-        driveStraight(DRIVE_SPEED,70,0);
-*/
-
+        driveStraight(DRIVE_SPEED,-40,-270);*/
     }
 
     public void resetHeading() {
@@ -154,7 +156,7 @@ public class AutoRed extends LinearOpMode {
     }
     public void repositionbrazo(int pos){
         motor3.setTargetPosition(pos);
-        motor3.setPower(.9);
+        motor3.setPower(.5);
         motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void close(){
@@ -162,8 +164,8 @@ public class AutoRed extends LinearOpMode {
         servoIzquierdo.setPosition(0.6);
     }
     public void open(){
-        servoDerecho.setPosition(1);
-        servoIzquierdo.setPosition(0.9);
+        servoDerecho.setPosition(0.9);
+        servoIzquierdo.setPosition(0.8);
     }
 
 

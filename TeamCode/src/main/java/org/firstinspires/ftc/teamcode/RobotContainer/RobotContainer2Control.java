@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @TeleOp
-public class RobotContainer1Control extends CommandOpMode {
+public class RobotContainer2Control extends CommandOpMode {
     @Override
     public void initialize() {
         SampleTankDrive sampleTankDrive = new SampleTankDrive(hardwareMap);
@@ -33,28 +33,37 @@ public class RobotContainer1Control extends CommandOpMode {
         m_drive.setDefaultCommand(new TankDriveCommand(m_drive, chassisDriver::getLeftY
          ,chassisDriver::getRightX));
 
+        chassisDriver.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(new InstantCommand(m_drive::bajarVel));
+
         //Arm------------------------------------
 
-        chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(() -> m_arm.setPosition(3350,0.7));
+        //POSE
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(() -> m_arm.setPosition(0,0.5));
 
-        chassisDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> m_arm.setPosition(50,0.7));
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.B)
+                .whenPressed(() -> m_arm.setPosition(-800,0.5));
 
-        chassisDriver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,0.5))
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.Y)
+                .whenPressed(() -> m_arm.setPosition(-1400,0.5));
+
+        //MANUAL
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.5))
                         .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
 
-        chassisDriver.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.8))
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,0.8))
                                 .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
-        chassisDriver.getGamepadButton(GamepadKeys.Button.X)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+100,0.5));
+        //SMALLER MANUAL
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+50,0.5));
 
-        chassisDriver.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(new InstantCommand(m_drive::bajarVel));
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-50,0.5));
 
 
         //Servo -------------------------------------------------------------
@@ -65,8 +74,6 @@ public class RobotContainer1Control extends CommandOpMode {
         new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.DPAD_RIGHT)
                 .whenPressed(m_servo::close);
 
-        new GamepadButton(new GamepadEx(gamepad1), GamepadKeys.Button.B)
-                .toggleWhenPressed(m_servo::openPose, m_servo::closePose);
         //-------------------------------------------------------------------------------
         schedule(new RunCommand(() -> {
             m_drive.update();

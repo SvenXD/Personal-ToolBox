@@ -56,7 +56,7 @@ public class TankDriveSubsystem extends SubsystemBase {
                 new Pose2d(
                         vel ? -leftY : -leftY*.5,
                         0,
-                        vel ? -rightX : -rightX*.35
+                        vel ? rightX : rightX*.45
                 )
         );
 
