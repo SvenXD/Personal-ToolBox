@@ -47,7 +47,7 @@ public class TankAuto extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = 12;
 
-    static final double     DRIVE_SPEED             = 0.7
+    static final double     DRIVE_SPEED             = 0.9
             ;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;
@@ -82,6 +82,18 @@ public class TankAuto extends LinearOpMode {
         resetHeading();
 
         waitForStart();
+        driveStraight(DRIVE_SPEED,50,0);
+        sleep(300);
+        manualTurn(1,90);
+        sleep(300);
+        driveStraight(2,80,90);
+        sleep(300);
+        manualTurn(1,-0);
+        sleep(300);
+        driveStraight(1,50,-0);
+        sleep(300);
+
+        /*        waitForStart();
         driveStraight(DRIVE_SPEED,20,0);
         sleep(300);
         manualTurn(-1,-90);
@@ -91,6 +103,7 @@ public class TankAuto extends LinearOpMode {
         manualTurn(1,180);
         sleep(300);
         driveStraight(DRIVE_SPEED,30,180);
+*/
 
     }
 
@@ -111,8 +124,6 @@ public class TankAuto extends LinearOpMode {
            return angles.firstAngle;
        }while(activate);
     }
-
-
 
     public void driveStraight(double maxDriveSpeed,
                               double distance,
@@ -182,7 +193,7 @@ public class TankAuto extends LinearOpMode {
 
     private void sendTelemetry(boolean straight) {
 
-  /*      if (straight) {
+        if (straight) {
             telemetry.addData("Motion", "Drive Straight");
             telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftTarget,  rightTarget);
             telemetry.addData("Actual Pos L:R",  "%7d:%7d",      leftDrive.getCurrentPosition(),
@@ -191,11 +202,11 @@ public class TankAuto extends LinearOpMode {
             telemetry.addData("Motion", "Turning");
         }
 
-/*telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHeading);
+telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHeading);
         telemetry.addData("Error:Steer",  "%5.1f:%5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L:R.", "%5.2f : %5.2f", leftSpeed, rightSpeed);
-       */
-        telemetry.addData("Heading test",getgetRawHeading(true));
+
+        telemetry.addData("Heading test",getRawHeading());
         telemetry.addData("Desired Heading test",desiredHeading);
         telemetry.update();
     }
@@ -270,9 +281,9 @@ public class TankAuto extends LinearOpMode {
     }
 
     public void manualTurn(double turnDirection, double heading){
+        globalTurn = true;
         do {
-            globalTurn = true;
-            if (isWithinThreshold(getgetRawHeading(true), heading, 157)) {
+            if (!isWithinThreshold(getgetRawHeading(true), heading, 0.5)) {
                 leftDrive.setPower(turnDirection * -1);
                 rightDrive.setPower(turnDirection);
                 desiredHeading = heading;
@@ -285,7 +296,7 @@ public class TankAuto extends LinearOpMode {
     }
 
     public boolean isWithinThreshold(double value, double target, double threshold){
-        return Math.abs(value - target) < threshold;
+        return Math.abs(value - target) <= threshold;
     }
 
 
