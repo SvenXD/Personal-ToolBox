@@ -30,6 +30,11 @@ public class TankAuto extends LinearOpMode {
     private double          headingError  = 0;
 
     private double          desiredHeading = 0;
+
+    private double          rightSetPoint = 0;
+
+    private double          leftSetPoint = 0;
+
     private DcMotor rightDrive = null;private DcMotor leftDrive = null;
 
     private double  targetHeading = 0;
@@ -40,7 +45,7 @@ public class TankAuto extends LinearOpMode {
     private int     leftTarget    = 0;
     private int     rightTarget   = 0;
 
-    private boolean globalTurn = true;
+    private boolean globalConstant = true;
 
     static final double     COUNTS_PER_MOTOR_REV    = 28 ;   // eg: GoBILDA 312 RPM Yellow Jacket
     static final double     DRIVE_GEAR_REDUCTION    = 15.0 ;     // No External Gearing.
@@ -82,16 +87,19 @@ public class TankAuto extends LinearOpMode {
         resetHeading();
 
         waitForStart();
-        driveStraight(DRIVE_SPEED,50,0);
+
+        driveUsingEncoder(-0.9,1300);
+        sleep(400);                  //     ^
+        manualTurn(-1,90);  //-1   |
+        sleep(400);
+        resetEncoder();
+        sleep(100);
+        useEncoder();
         sleep(300);
-        manualTurn(1,90);
-        sleep(300);
-        driveStraight(2,80,90);
-        sleep(300);
-        manualTurn(1,-0);
-        sleep(300);
-        driveStraight(1,50,-0);
-        sleep(300);
+        driveUsingEncoder(-0.9,400);
+        sleep(400);
+        manualTurn(1,45);
+
 
         /*        waitForStart();
         driveStraight(DRIVE_SPEED,20,0);
@@ -208,6 +216,9 @@ telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHea
 
         telemetry.addData("Heading test",getRawHeading());
         telemetry.addData("Desired Heading test",desiredHeading);
+        telemetry.addData("Right encoder pose",rightDrive.getCurrentPosition());
+        telemetry.addData("Left encoder pose",leftDrive.getCurrentPosition());
+        telemetry.addData("Desired encoder pose",rightSetPoint);
         telemetry.update();
     }
 
@@ -281,23 +292,60 @@ telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHea
     }
 
     public void manualTurn(double turnDirection, double heading){
-        globalTurn = true;
+        globalConstant = true;
         do {
-            if (!isWithinThreshold(getgetRawHeading(true), heading, 0.5)) {
+            if (!isWithinThreshold(getgetRawHeading(true), heading, 29)) {
                 leftDrive.setPower(turnDirection * -1);
                 rightDrive.setPower(turnDirection);
                 desiredHeading = heading;
             } else {
                 leftDrive.setPower(0);
                 rightDrive.setPower(0);
-                globalTurn = false;
+                globalConstant = false;
             }
-        }while(globalTurn);
+        }while(globalConstant);
     }
 
     public boolean isWithinThreshold(double value, double target, double threshold){
         return Math.abs(value - target) <= threshold;
     }
+
+    public void driveUsingEncoder(double power, double setPoint){
+        globalConstant = true;
+        leftSetPoint = setPoint;
+        rightSetPoint = setPoint;
+        do{
+           if(Math.abs(leftDrive.getCurrentPosition()) < setPoint)
+           {
+               leftDrive.setPower(power);
+           }
+           else{
+               leftDrive.setPower(0);
+            }
+           if(Math.abs(rightDrive.getCurrentPosition()) < setPoint){
+               rightDrive.setPower(power);
+
+           }
+           else{
+               rightDrive.setPower(0);
+               globalConstant = false;
+           }
+           sendTelemetry(true);
+        }while(globalConstant);
+    }
+
+    public void resetEncoder(){
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void useEncoder(){
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
 
 
 }

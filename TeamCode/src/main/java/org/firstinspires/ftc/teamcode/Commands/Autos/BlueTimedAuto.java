@@ -58,6 +58,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Timed Blue Auto", group="Robot")
+@Disabled
 
 public class BlueTimedAuto extends LinearOpMode {
 
@@ -108,7 +109,7 @@ public class BlueTimedAuto extends LinearOpMode {
         leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.78)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
@@ -129,7 +130,16 @@ public class BlueTimedAuto extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        sleep(1000);
+        sleep(700);
+        leftDrive.setPower(TURN_SPEED);
+        rightDrive.setPower(-TURN_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
+            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+        sleep(600);
+
         setPosition(0,0.6);
         sleep(1000);
         /*

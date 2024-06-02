@@ -40,21 +40,21 @@ public class RobotContainer2Control extends CommandOpMode {
 
         //POSE
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> m_arm.setPosition(0,0.5));
+                .whenPressed(() -> m_arm.setPosition(171,0.5));
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> m_arm.setPosition(-800,0.5));
+                .whenPressed(() -> m_arm.setPosition(800,0.5));
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(() -> m_arm.setPosition(-1400,0.5));
+                .whenPressed(() -> m_arm.setPosition(3260,0.5));
 
         //MANUAL
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.5))
                         .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
 
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
                 .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,0.8))
                                 .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 

@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //import org.firstinspires.ftc.teamcode.Commands.ArmCommand;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @TeleOp
+@Disabled
 public class RobotContainer1Control extends CommandOpMode {
     @Override
     public void initialize() {
