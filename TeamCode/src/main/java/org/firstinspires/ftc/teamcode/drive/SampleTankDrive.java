@@ -63,6 +63,10 @@ public class SampleTankDrive extends TankDrive {
     public static double VX_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
+    public static double leftSpeed = 0;
+
+    public static double rightSpeed = 0;
+
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
@@ -141,6 +145,22 @@ public class SampleTankDrive extends TankDrive {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, accelConstraint);
     }
 
+    public double getLeftSpeed(){
+        for (DcMotorEx leftMotor : leftMotors) {
+        leftSpeed = leftMotor.getVelocity();
+        }
+        return leftSpeed;
+    }
+
+    public double getRightSpeed(){
+        for (DcMotorEx rightMotor : rightMotors) {
+            rightSpeed = rightMotor.getVelocity();
+        }
+        return rightSpeed;
+    }
+
+
+
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
         return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, accelConstraint);
     }
@@ -156,6 +176,7 @@ public class SampleTankDrive extends TankDrive {
                 MAX_ANG_VEL, MAX_ANG_ACCEL
         );
     }
+
 
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(

@@ -50,16 +50,16 @@ public class RobotContainer2Control extends CommandOpMode {
 
         //MANUAL
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,0.5))
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,1))
                         .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,0.8))
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,1))
                                 .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
         //SMALLER MANUAL
-        subsystemsDriver.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.X)
                 .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+50,0.5));
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
@@ -78,6 +78,8 @@ public class RobotContainer2Control extends CommandOpMode {
         schedule(new RunCommand(() -> {
             m_drive.update();
             telemetry.addData("Heading", m_drive.getPoseEstimate().getHeading());
+            telemetry.addData("Right tps",m_drive.rightTps());
+            telemetry.addData("Left tps",m_drive.leftTps());
             telemetry.update();
         }));
 

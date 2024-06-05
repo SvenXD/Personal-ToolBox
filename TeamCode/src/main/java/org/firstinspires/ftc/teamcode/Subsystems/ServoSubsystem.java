@@ -21,12 +21,12 @@ public class ServoSubsystem extends SubsystemBase {
         servoDerecho.setInverted(true);
     }
     public void close(){
-     servoDerecho.setPosition(0.35);
-     servoIzquierdo.setPosition(0.35);
+     servoDerecho.setPosition(0.25);
+     servoIzquierdo.setPosition(0.25);
     }
     public void open(){
-        servoDerecho.setPosition(0.45);
-        servoIzquierdo.setPosition(0.45);
+        servoDerecho.setPosition(0.4);
+        servoIzquierdo.setPosition(0.4);
     }
     public void customPose(double pose1,double pose2){
         servoDerecho.setPosition(pose1);

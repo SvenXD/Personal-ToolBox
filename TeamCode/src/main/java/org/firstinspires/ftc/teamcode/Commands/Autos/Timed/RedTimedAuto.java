@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Commands.Autos;
+package org.firstinspires.ftc.teamcode.Commands.Autos.Timed;
 
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
@@ -57,10 +57,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Timed Blue Auto", group="Robot")
-@Disabled
+@Autonomous(name="Timed Red Auto", group="Robot")
 
-public class BlueTimedAuto extends LinearOpMode {
+public class RedTimedAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor         leftDrive   = null;
@@ -86,8 +85,8 @@ public class BlueTimedAuto extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
         servoDerecho.setInverted(true);
         armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -102,27 +101,24 @@ public class BlueTimedAuto extends LinearOpMode {
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
         // Step 1:  Drive forward for 3 seconds
-        close();
         sleep(1000);
-        setPosition(-300,0.7);
-        sleep(1500);
         leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.70)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        sleep(300);
+        sleep(5000);
         // Step 2:  Spin right for 1.3 seconds
-        leftDrive.setPower(-TURN_SPEED);
-        rightDrive.setPower(TURN_SPEED);
+      /*  leftDrive.setPower(TURN_SPEED);
+        rightDrive.setPower(-TURN_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.4)) {
             telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        sleep(600);
+        sleep(350);
         leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
@@ -130,18 +126,7 @@ public class BlueTimedAuto extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        sleep(700);
-        leftDrive.setPower(TURN_SPEED);
-        rightDrive.setPower(-TURN_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
-            telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-            telemetry.update();
-        }
         sleep(600);
-
-        setPosition(0,0.6);
-        sleep(1000);
         /*
         leftDrive.setPower(TURN_SPEED);
         rightDrive.setPower(-TURN_SPEED);
@@ -151,16 +136,16 @@ public class BlueTimedAuto extends LinearOpMode {
             telemetry.update();
         }
         sleep(1000);
-
+*/
         // Step 3:  Drive Backward for 1 Second
-        leftDrive.setPower(FORWARD_SPEED);
+       /* leftDrive.setPower(FORWARD_SPEED);
         rightDrive.setPower(FORWARD_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
             telemetry.addData("Path", "Leg 3: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-        */
+
 
 
         // Step 4:  Stop
@@ -171,25 +156,36 @@ public class BlueTimedAuto extends LinearOpMode {
         telemetry.update();
         sleep(1000);
         // Step 2:  Spin right for 1.3 seconds
-        leftDrive.setPower(TURN_SPEED);
-        rightDrive.setPower(-TURN_SPEED);
+        leftDrive.setPower(-TURN_SPEED);
+        rightDrive.setPower(TURN_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
             telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
         sleep(1400);
+        leftDrive.setPower(-FORWARD_SPEED);
+        rightDrive.setPower(-FORWARD_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.3)) {
+            telemetry.addData("Path", "Leg 3: %4.1f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+*/
+
 
         leftDrive.setPower(0);
         rightDrive.setPower(0);
+
+        sleep(100000);
     }
     public void close(){
-        servoDerecho.setPosition(0.5);
-        servoIzquierdo.setPosition(0.4);
+        servoDerecho.setPosition(0.35);
+        servoIzquierdo.setPosition(0.34);
     }
     public void open(){
-        servoDerecho.setPosition(1);
-        servoIzquierdo.setPosition(0.8);
+        servoDerecho.setPosition(0.45);
+        servoIzquierdo.setPosition(0.40);
     }
 
     public void setPosition(int pos, double power){

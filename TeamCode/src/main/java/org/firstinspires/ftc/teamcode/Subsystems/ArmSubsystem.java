@@ -45,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
 @Override
     public void periodic(){
         telemetry.addData("brazo",armMotor.getCurrentPosition());
-        
+        telemetry.addData("Tps",armMotor.getVelocity());
     }
 
 }

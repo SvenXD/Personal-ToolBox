@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands.Autos;
+package org.firstinspires.ftc.teamcode.Commands.Autos.Testing;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.hardware.ServoEx;

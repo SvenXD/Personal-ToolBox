@@ -37,6 +37,8 @@ public class RobotContainerTank extends CommandOpMode {
         schedule(new RunCommand(() -> {
             m_drive.update();
             telemetry.addData("Heading", m_drive.getPoseEstimate().getHeading());
+            telemetry.addData("Right tps",m_drive.rightTps());
+            telemetry.addData("Left tps",m_drive.leftTps());
             telemetry.update();
         }));
 //Test

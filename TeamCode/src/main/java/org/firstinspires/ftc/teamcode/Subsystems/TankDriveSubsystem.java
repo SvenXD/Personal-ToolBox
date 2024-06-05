@@ -76,6 +76,16 @@ public class TankDriveSubsystem extends SubsystemBase {
         return drive.getPoseEstimate();
     }
 
+    public double rightTps(){
+        return drive.getRightSpeed();
+    }
+
+    public double leftTps(){
+        return  drive.getLeftSpeed();
+    }
+
+
+
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return drive.trajectoryBuilder(startPose);
     }
