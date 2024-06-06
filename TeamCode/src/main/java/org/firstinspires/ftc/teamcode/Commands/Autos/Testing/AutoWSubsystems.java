@@ -7,6 +7,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -18,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous
         (name="Test with imu tank", group="Linear Opmode")
-public class TankWImuauto extends LinearOpMode {
+public class AutoWSubsystems extends LinearOpMode {
 
 
     private BNO055IMU       imu         = null;
@@ -28,6 +30,8 @@ public class TankWImuauto extends LinearOpMode {
 
     private double          desiredHeading = 0;
     private DcMotor rightDrive = null;private DcMotor leftDrive = null;
+
+    private DcMotorEx armMotor1 = null; private DcMotorEx armMotor2 = null;
 
     private double  targetHeading = 0;
     private double  driveSpeed    = 0;
@@ -46,14 +50,15 @@ public class TankWImuauto extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = 12;
 
-    static final double     DRIVE_SPEED             = 0.8
+    static final double     DRIVE_SPEED             = 0.3
             ;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
+    static final double     TURN_SPEED              = 0.15;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;
 
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;
 
+    ServoEx servoDerecho,servoIzquierdo;
 
 
     @Override
@@ -67,6 +72,22 @@ public class TankWImuauto extends LinearOpMode {
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
 
+        armMotor1 = hardwareMap.get(DcMotorEx.class,"brazo1");
+        armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        armMotor2 = hardwareMap.get(DcMotorEx.class,"brazo2");
+        armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        armMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        servoDerecho = new SimpleServo(hardwareMap, "servoDer",0,180);
+        servoIzquierdo = new SimpleServo(hardwareMap, "servoIzq",0,180);
+        servoDerecho.setInverted(true);
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -84,15 +105,18 @@ public class TankWImuauto extends LinearOpMode {
 
         waitForStart();
 
-        sleep(700);
-        driveStraight(DRIVE_SPEED,45,0);
+        close();
+        sleep(1000);
+        setPosition(90,1);
+        sleep(800);
+        driveStraight(DRIVE_SPEED,-66,0);
         sleep(500);
-        manualTurn(1,-90);
+        turnToHeading(TURN_SPEED,-90);
         sleep(300);
-        driveStraight(1,-100,90);
-        sleep(300);
-        manualTurn(1,-125);
-        sleep(3000);
+        driveStraight(DRIVE_SPEED,-173,-90);
+        sleep(1000);
+        open();
+
 
 
     }
@@ -113,6 +137,27 @@ public class TankWImuauto extends LinearOpMode {
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             return angles.firstAngle;
         }while(activate);
+    }
+
+    public void setPosition(int pos, double power){
+        armMotor1.setTargetPosition(pos);
+        armMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor1.setPower(power);
+
+
+        armMotor2.setTargetPosition(-pos);
+        armMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor2.setPower(power);
+
+    }
+
+    public void open(){
+        servoDerecho.setPosition(0.25);
+        servoIzquierdo.setPosition(0.25);
+    }
+    public void close(){
+        servoDerecho.setPosition(0.4);
+        servoIzquierdo.setPosition(0.4);
     }
 
 
@@ -146,7 +191,7 @@ public class TankWImuauto extends LinearOpMode {
                     (leftDrive.isBusy() && rightDrive.isBusy())) {
 
                 // Determine required steering to keep on heading
-                turnSpeed = getSteeringCorrection(heading, 0.005);
+                turnSpeed = getSteeringCorrection(heading, P_TURN_GAIN);
 
                 // if driving in reverse, the motor correction also needs to be reversed
                 if (distance < 0)
