@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 //import org.firstinspires.ftc.teamcode.Commands.ArmCommand;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @TeleOp
+
 public class RobotContainer2Control extends CommandOpMode {
     @Override
     public void initialize() {
@@ -50,12 +52,12 @@ public class RobotContainer2Control extends CommandOpMode {
 
         //MANUAL
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-3000,1))
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()-1000000,1))
                         .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+3000,1))
+                .whenPressed(() -> m_arm.setPosition(m_arm.getArmPose()+1000000,1))
                                 .whenReleased(() -> m_arm.setPosition(m_arm.getArmPose(),0));
 
         //SMALLER MANUAL

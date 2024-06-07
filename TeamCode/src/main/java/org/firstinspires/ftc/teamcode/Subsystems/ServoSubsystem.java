@@ -25,8 +25,8 @@ public class ServoSubsystem extends SubsystemBase {
      servoIzquierdo.setPosition(0.25);
     }
     public void open(){
-        servoDerecho.setPosition(0.4);
-        servoIzquierdo.setPosition(0.4);
+        servoDerecho.setPosition(0.60);
+        servoIzquierdo.setPosition(0.60);
     }
     public void customPose(double pose1,double pose2){
         servoDerecho.setPosition(pose1);

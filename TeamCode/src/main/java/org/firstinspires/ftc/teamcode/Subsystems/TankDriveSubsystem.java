@@ -61,7 +61,7 @@ public class TankDriveSubsystem extends SubsystemBase {
 
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        vel ? -leftY : -leftY*.5,
+                        vel ? leftY : leftY*.5,
                         0,
                         vel ? -rightX : -rightX*.45
                 )

@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.Commands.Autos.Testing;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+
+import android.app.admin.SecurityLog;
+
+import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -16,26 +21,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 
 
 @Autonomous
-        (name="Tank only auto", group="Linear Opmode")
+        (name="New auto test", group="Linear Opmode")
 public class TankAuto extends LinearOpMode {
 
 
-    private BNO055IMU       imu         = null;
+    private IMU imu         = null;
     private double          robotHeading  = 0;
     private double          headingOffset = -150;
     private double          headingError  = 0;
 
     private double          desiredHeading = 0;
-
-    private double          rightSetPoint = 0;
-
-    private double          leftSetPoint = 0;
-
     private DcMotor rightDrive = null;private DcMotor leftDrive = null;
+
 
     private double  targetHeading = 0;
     private double  driveSpeed    = 0;
@@ -45,32 +46,36 @@ public class TankAuto extends LinearOpMode {
     private int     leftTarget    = 0;
     private int     rightTarget   = 0;
 
-    private boolean globalConstant = true;
+    private boolean globalConstant = false;
+
+    private boolean globalTurn = true;
 
     static final double     COUNTS_PER_MOTOR_REV    = 28 ;   // eg: GoBILDA 312 RPM Yellow Jacket
     static final double     DRIVE_GEAR_REDUCTION    = 15.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = 12;
 
-    static final double     DRIVE_SPEED             = 0.9
+    static final double     DRIVE_SPEED             = 0.5
             ;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
+    static final double     TURN_SPEED              = 0.15;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;
 
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;
 
 
+
     @Override
     public void runOpMode() {
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightDrive = hardwareMap.get(DcMotor.class, "rightFront");
+
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -88,29 +93,20 @@ public class TankAuto extends LinearOpMode {
 
         waitForStart();
 
-        driveUsingEncoder(-0.9,1300);
-        sleep(400);                  //     ^
-        manualTurn(-1,90);  //-1   |
-        sleep(400);
-        resetEncoder();
-        sleep(100);
-        useEncoder();
-        sleep(300);
-        driveUsingEncoder(-0.9,400);
-        sleep(400);
-        manualTurn(1,45);
 
+       /* sleep(300);
+        turnToHeading(TURN_SPEED,-90);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,140,-90);
+        sleep(300);
+        turnToHeading(TURN_SPEED,-35);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,100,-35);
+        sleep(300);
+        turnToHeading(TURN_SPEED,0);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,100,0);
 
-        /*        waitForStart();
-        driveStraight(DRIVE_SPEED,20,0);
-        sleep(300);
-        manualTurn(-1,-90);
-        sleep(300);
-        driveStraight(DRIVE_SPEED,20,-90);
-        sleep(300);
-        manualTurn(1,180);
-        sleep(300);
-        driveStraight(DRIVE_SPEED,30,180);
 */
 
     }
@@ -122,16 +118,19 @@ public class TankAuto extends LinearOpMode {
         robotHeading = 0;
     }
     public double getRawHeading() {
-        Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles   = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angles.firstAngle;
     }
 
     public double getgetRawHeading(boolean activate) {
-       do {
-           Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-           return angles.firstAngle;
-       }while(activate);
+        do {
+            Orientation angles = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            return angles.firstAngle;
+        }while(activate);
     }
+
+
+
 
     public void driveStraight(double maxDriveSpeed,
                               double distance,
@@ -162,7 +161,7 @@ public class TankAuto extends LinearOpMode {
                     (leftDrive.isBusy() && rightDrive.isBusy())) {
 
                 // Determine required steering to keep on heading
-                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+                turnSpeed = getSteeringCorrection(heading, P_TURN_GAIN);
 
                 // if driving in reverse, the motor correction also needs to be reversed
                 if (distance < 0)
@@ -210,15 +209,12 @@ public class TankAuto extends LinearOpMode {
             telemetry.addData("Motion", "Turning");
         }
 
-telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHeading);
+        telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHeading);
         telemetry.addData("Error:Steer",  "%5.1f:%5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L:R.", "%5.2f : %5.2f", leftSpeed, rightSpeed);
 
-        telemetry.addData("Heading test",getRawHeading());
+        telemetry.addData("Heading test",getgetRawHeading(true));
         telemetry.addData("Desired Heading test",desiredHeading);
-        telemetry.addData("Right encoder pose",rightDrive.getCurrentPosition());
-        telemetry.addData("Left encoder pose",leftDrive.getCurrentPosition());
-        telemetry.addData("Desired encoder pose",rightSetPoint);
         telemetry.update();
     }
 
@@ -306,46 +302,10 @@ telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHea
         }while(globalConstant);
     }
 
+
     public boolean isWithinThreshold(double value, double target, double threshold){
-        return Math.abs(value - target) <= threshold;
+        return Math.abs(value - target) < threshold;
     }
-
-    public void driveUsingEncoder(double power, double setPoint){
-        globalConstant = true;
-        leftSetPoint = setPoint;
-        rightSetPoint = setPoint;
-        do{
-           if(Math.abs(leftDrive.getCurrentPosition()) < setPoint)
-           {
-               leftDrive.setPower(power);
-           }
-           else{
-               leftDrive.setPower(0);
-            }
-           if(Math.abs(rightDrive.getCurrentPosition()) < setPoint){
-               rightDrive.setPower(power);
-
-           }
-           else{
-               rightDrive.setPower(0);
-               globalConstant = false;
-           }
-           sendTelemetry(true);
-        }while(globalConstant);
-    }
-
-    public void resetEncoder(){
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
-        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    public void useEncoder(){
-        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
 
 
 }

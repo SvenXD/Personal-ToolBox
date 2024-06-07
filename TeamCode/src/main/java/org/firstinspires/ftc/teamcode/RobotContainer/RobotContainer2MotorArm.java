@@ -40,13 +40,16 @@ public class RobotContainer2MotorArm extends CommandOpMode {
         //Arm------------------------------------
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(() -> m_arm.setPosition(0,1));
+                .whenPressed(() -> m_arm.setPosition(0,0.5));
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> m_arm.setPosition(100,0.5));
+                .whenPressed(() -> m_arm.setPosition(50,0.5));
 
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.Y)
-                .whenPressed(() -> m_arm.setPosition(270,0.5));
+                .whenPressed(() -> m_arm.setPosition(300,0.2));
+
+        subsystemsDriver.getGamepadButton(GamepadKeys.Button.X)
+                        .whenPressed(m_arm::resetArmTicks);
 
         //MANUAL
         subsystemsDriver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)

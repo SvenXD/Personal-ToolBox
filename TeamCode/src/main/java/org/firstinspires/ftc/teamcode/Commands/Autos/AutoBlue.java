@@ -22,6 +22,8 @@ import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @Autonomous
         (name="Blue Auto", group="Linear Opmode")
+@Disabled
+
 public class AutoBlue extends LinearOpMode {
 
 

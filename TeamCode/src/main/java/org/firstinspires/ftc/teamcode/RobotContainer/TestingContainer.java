@@ -12,35 +12,28 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Commands.TankDriveCommand;
 
 import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Testing;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @TeleOp
-@Disabled
 
-public class RobotContainerTank extends CommandOpMode {
+public class TestingContainer extends CommandOpMode {
     @Override
     public void initialize() {
-        SampleTankDrive sampleTankDrive = new SampleTankDrive(hardwareMap);
-        TankDriveSubsystem m_drive = new TankDriveSubsystem(sampleTankDrive);
-
+        Testing testing = new Testing(telemetry,hardwareMap);
         GamepadEx chassisDriver = new GamepadEx(gamepad1);
         GamepadEx subsystemsDriver = new GamepadEx(gamepad2);
 
         //Tank----------------------------------
 
-        m_drive.setDefaultCommand(new TankDriveCommand(m_drive, chassisDriver::getLeftY
-                ,chassisDriver::getRightX));
 
         chassisDriver.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(new InstantCommand(m_drive::bajarVel));
+                .whenPressed(() -> testing.setPosition(100000,1));
 
         //------------------------------------------
 
         schedule(new RunCommand(() -> {
-            m_drive.update();
-            telemetry.addData("Heading", m_drive.getPoseEstimate().getHeading());
-            telemetry.addData("Right tps",m_drive.rightTps());
-            telemetry.addData("Left tps",m_drive.leftTps());
+
             telemetry.update();
         }));
 //Test

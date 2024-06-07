@@ -39,6 +39,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
 
+
+
     public int  getArmPose(){
         return armMotor.getCurrentPosition();
     }

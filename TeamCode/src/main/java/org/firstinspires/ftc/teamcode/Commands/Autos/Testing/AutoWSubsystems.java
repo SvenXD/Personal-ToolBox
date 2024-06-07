@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.Commands.Autos.Testing;
 
 
+import android.app.admin.SecurityLog;
+
+import com.arcrobotics.ftclib.gamepad.TriggerReader;
 import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -16,14 +21,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.opencv.imgproc.CLAHE;
 
 
 @Autonomous
-        (name="Test with imu tank", group="Linear Opmode")
+        (name="CHOOSE THIS AUTO", group="Linear Opmode")
 public class AutoWSubsystems extends LinearOpMode {
 
 
-    private BNO055IMU       imu         = null;
+    private IMU imu         = null;
     private double          robotHeading  = 0;
     private double          headingOffset = -150;
     private double          headingError  = 0;
@@ -50,7 +57,7 @@ public class AutoWSubsystems extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = 12;
 
-    static final double     DRIVE_SPEED             = 0.3
+    static final double     DRIVE_SPEED             = 0.5
             ;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.15;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;
@@ -64,9 +71,9 @@ public class AutoWSubsystems extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
         imu.initialize(parameters);
 
         leftDrive = hardwareMap.get(DcMotor.class, "leftFront");
@@ -81,13 +88,13 @@ public class AutoWSubsystems extends LinearOpMode {
         armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
+        armMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
 
         servoDerecho = new SimpleServo(hardwareMap, "servoDer",0,180);
         servoIzquierdo = new SimpleServo(hardwareMap, "servoIzq",0,180);
-        servoDerecho.setInverted(true);
+        servoIzquierdo.setInverted(false);
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -105,19 +112,30 @@ public class AutoWSubsystems extends LinearOpMode {
 
         waitForStart();
 
-        close();
-        sleep(1000);
-        setPosition(90,1);
-        sleep(800);
-        driveStraight(DRIVE_SPEED,-66,0);
-        sleep(500);
+        driveStraight(DRIVE_SPEED,-220,0);
+        sleep(300);
         turnToHeading(TURN_SPEED,-90);
         sleep(300);
-        driveStraight(DRIVE_SPEED,-173,-90);
+        driveStraight(0.3,-141,-90);
+        sleep(300);
+        close();
         sleep(1000);
+        setPosition(230,0.9);
+        sleep(3000);
+        driveStraight(DRIVE_SPEED,-220,-90);
+        sleep(300);
+        turnToHeading(TURN_SPEED,0);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,-125,0);
+        sleep(300);
+        turnToHeading(TURN_SPEED,135);
+        sleep(300);
+        driveStraight(DRIVE_SPEED,70,135 );
+        sleep(300);
+        setPosition(300,0.9);
+        sleep(1400);
         open();
-
-
+        sleep(10000);
 
     }
 
@@ -128,13 +146,13 @@ public class AutoWSubsystems extends LinearOpMode {
         robotHeading = 0;
     }
     public double getRawHeading() {
-        Orientation angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        Orientation angles   = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return angles.firstAngle;
     }
 
     public double getgetRawHeading(boolean activate) {
         do {
-            Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            Orientation angles = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             return angles.firstAngle;
         }while(activate);
     }
@@ -151,13 +169,13 @@ public class AutoWSubsystems extends LinearOpMode {
 
     }
 
-    public void open(){
-        servoDerecho.setPosition(0.25);
-        servoIzquierdo.setPosition(0.25);
-    }
     public void close(){
-        servoDerecho.setPosition(0.4);
-        servoIzquierdo.setPosition(0.4);
+        servoDerecho.setPosition(1);
+        servoIzquierdo.setPosition(0);
+    }
+    public void open(){
+        servoDerecho.setPosition(0.9);
+        servoIzquierdo.setPosition(0.32);
     }
 
 
@@ -230,7 +248,7 @@ public class AutoWSubsystems extends LinearOpMode {
 
     private void sendTelemetry(boolean straight) {
 
-  /*      if (straight) {
+        if (straight) {
             telemetry.addData("Motion", "Drive Straight");
             telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftTarget,  rightTarget);
             telemetry.addData("Actual Pos L:R",  "%7d:%7d",      leftDrive.getCurrentPosition(),
@@ -239,10 +257,10 @@ public class AutoWSubsystems extends LinearOpMode {
             telemetry.addData("Motion", "Turning");
         }
 
-/*telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHeading);
+telemetry.addData("Angle Target:Current", "%5.2f:%5.0f", targetHeading, robotHeading);
         telemetry.addData("Error:Steer",  "%5.1f:%5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L:R.", "%5.2f : %5.2f", leftSpeed, rightSpeed);
-       */
+
         telemetry.addData("Heading test",getgetRawHeading(true));
         telemetry.addData("Desired Heading test",desiredHeading);
         telemetry.update();
