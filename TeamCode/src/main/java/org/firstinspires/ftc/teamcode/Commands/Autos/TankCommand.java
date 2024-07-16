@@ -1,26 +1,21 @@
-package org.firstinspires.ftc.teamcode.Commands;
+package org.firstinspires.ftc.teamcode.Commands.Autos;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 
 import java.util.function.DoubleSupplier;
 
-public class TankDriveCommand extends CommandBase {
+public class TankCommand extends CommandBase {
 
     private final TankDriveSubsystem drive;
 
     private final DoubleSupplier leftY, rightX;
 
-
-    public TankDriveCommand(TankDriveSubsystem drive, DoubleSupplier leftY, DoubleSupplier rightX){
+    public TankCommand(TankDriveSubsystem drive, DoubleSupplier leftY, DoubleSupplier rightX){
         this.drive = drive;
         this.leftY = leftY;
         this.rightX = rightX;
-
-
 
         addRequirements(drive);
     }
@@ -28,8 +23,6 @@ public class TankDriveCommand extends CommandBase {
     @Override
     public void execute(){
         drive.drive(leftY.getAsDouble(), rightX.getAsDouble());
-
     }
-
 
 }

@@ -14,7 +14,6 @@
     public class HexArmSubsystem extends SubsystemBase {
 
         DcMotorEx armMotor1;
-
         DcMotorEx armMotor2;
         HardwareMap hardwareMap;
         Telemetry telemetry;

@@ -27,45 +27,28 @@ public class Testing extends SubsystemBase {
 
         motor1 = hardwareMap.get(DcMotorEx.class,"motor1");
         motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         motor2 = hardwareMap.get(DcMotorEx.class,"motor2");
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         motor3 = hardwareMap.get(DcMotorEx.class,"motor3");
         motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         motor4 = hardwareMap.get(DcMotorEx.class,"motor4");
         motor4.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
 
 
-    public void setPosition(int pos, double power){
-        motor1.setTargetPosition(pos);
-        motor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor1.setPower(power);
-
-
-        motor2.setTargetPosition(pos);
-        motor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor2.setPower(power);
-
-        motor3.setTargetPosition(pos);
-        motor3.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor3.setPower(power);
-
-        motor4.setTargetPosition(pos);
-        motor4.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor4.setPower(power);
-
+    public void setPower(){
+        motor1.setPower(1);
+        motor2.setPower(2);
+        motor3.setPower(3);
+        motor4.setPower(4);
     }
 
 

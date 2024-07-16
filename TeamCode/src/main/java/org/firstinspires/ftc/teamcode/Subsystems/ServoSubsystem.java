@@ -20,6 +20,7 @@ public class ServoSubsystem extends SubsystemBase {
         servoIzquierdo = new SimpleServo(hardwareMap, "servoIzq",0,180);
         servoDerecho.setInverted(true);
     }
+
     public void close(){
      servoDerecho.setPosition(0.25);
      servoIzquierdo.setPosition(0.25);
@@ -28,6 +29,7 @@ public class ServoSubsystem extends SubsystemBase {
         servoDerecho.setPosition(0.60);
         servoIzquierdo.setPosition(0.60);
     }
+
     public void customPose(double pose1,double pose2){
         servoDerecho.setPosition(pose1);
         servoIzquierdo.setPosition(pose2);

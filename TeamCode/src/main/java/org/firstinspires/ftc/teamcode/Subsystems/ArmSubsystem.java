@@ -13,10 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class ArmSubsystem extends SubsystemBase {
 
-    DcMotorEx armMotor;
+            DcMotorEx armMotor;
     HardwareMap hardwareMap;
     Telemetry telemetry;
-
 
     public ArmSubsystem(Telemetry telemetry, HardwareMap hardwareMap){
         this.telemetry = telemetry;
@@ -27,7 +26,6 @@ public class ArmSubsystem extends SubsystemBase {
             armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
 
@@ -38,7 +36,9 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor.setPower(power);
     }
 
-
+    public void setPower(){
+        armMotor.setPower(1);   //Doesnt work if its using the position mode
+    }
 
 
     public int  getArmPose(){

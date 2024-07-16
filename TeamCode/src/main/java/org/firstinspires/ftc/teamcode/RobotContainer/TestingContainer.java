@@ -11,12 +11,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Commands.TankDriveCommand;
 
+import org.firstinspires.ftc.teamcode.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Testing;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
 
 @TeleOp
-
+@Disabled
 public class TestingContainer extends CommandOpMode {
     @Override
     public void initialize() {
@@ -28,7 +29,7 @@ public class TestingContainer extends CommandOpMode {
 
 
         chassisDriver.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(() -> testing.setPosition(100000,1));
+                .whenPressed(() -> testing.setPower());
 
         //------------------------------------------
 
