@@ -7,9 +7,13 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.Util;
 
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.util.CerboSignal;
+import org.firstinspires.ftc.teamcode.util.CheesyDriveHelper;
 
 import java.util.List;
 
@@ -18,9 +22,11 @@ public class TankDriveSubsystem extends SubsystemBase {
 
 
     private final SampleTankDrive drive;
+    private final CheesyDriveHelper cheese;
 
-    public TankDriveSubsystem(SampleTankDrive drive) {
+    public TankDriveSubsystem(SampleTankDrive drive, CheesyDriveHelper cheese) {
         this.drive = drive;
+        this.cheese = cheese;
     }
     public void setPIDFCoefficients(DcMotorEx.RunMode mode, PIDFCoefficients coefficients) {
         drive.setPIDFCoefficients(mode, coefficients);
@@ -49,6 +55,11 @@ public class TankDriveSubsystem extends SubsystemBase {
         );
 
     }
+
+    public void openLoop(Gamepad joystick){
+        drive.setOpenLoop( cheese.cheesyDrive(-joystick.left_stick_y,-joystick.right_stick_x,false,false));
+    }
+
     public void setDrivePower(Pose2d drivePower) {
         drive.setDrivePower(drivePower);
     }

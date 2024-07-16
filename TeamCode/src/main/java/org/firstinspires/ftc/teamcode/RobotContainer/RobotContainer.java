@@ -11,13 +11,15 @@ import org.firstinspires.ftc.teamcode.Commands.TankDriveCommand;
 
 import org.firstinspires.ftc.teamcode.Subsystems.TankDriveSubsystem;
 import org.firstinspires.ftc.teamcode.drive.SampleTankDrive;
+import org.firstinspires.ftc.teamcode.util.CheesyDriveHelper;
 
 @TeleOp
 public class RobotContainer extends CommandOpMode {
     @Override
     public void initialize() {
         SampleTankDrive sampleTankDrive = new SampleTankDrive(hardwareMap);
-        TankDriveSubsystem m_drive = new TankDriveSubsystem(sampleTankDrive);
+        CheesyDriveHelper cheese = new CheesyDriveHelper();
+        TankDriveSubsystem m_drive = new TankDriveSubsystem(sampleTankDrive,cheese);
 
         GamepadEx chassisDriver = new GamepadEx(gamepad1);
         GamepadEx subsystemsDriver = new GamepadEx(gamepad2);
@@ -25,7 +27,7 @@ public class RobotContainer extends CommandOpMode {
         //Tank----------------------------------
 
         m_drive.setDefaultCommand(new TankDriveCommand(m_drive, chassisDriver::getLeftY
-         ,chassisDriver::getRightX));
+         ,chassisDriver::getRightX,gamepad1));
 
         //------------------------------------------
 

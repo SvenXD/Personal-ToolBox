@@ -33,6 +33,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.util.CerboSignal;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -286,6 +288,10 @@ public class SampleTankDrive extends TankDrive {
         for (DcMotorEx rightMotor : rightMotors) {
             rightMotor.setPower(v1);
         }
+    }
+
+    public void setOpenLoop(CerboSignal signal){
+        setMotorPowers(signal.getLeft(), signal.getRight());
     }
 
     @Override
